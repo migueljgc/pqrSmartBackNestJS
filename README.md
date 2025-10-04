@@ -37,5 +37,5 @@ cp .env.example .env   # edita las credenciales de la base de datos
 
 # Ejecutar en desarrollo
 npm run start:dev
-
+```
 El backend estará disponible en: **http://localhost:8080**
