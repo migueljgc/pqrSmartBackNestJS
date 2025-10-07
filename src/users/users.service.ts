@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -18,5 +18,8 @@ export class UsersService {
   }
   getUser(email: string, password: string) {
     return this.userRepository.findOneBy({ email, password });
+  }
+  async findAll() {
+    return this.userRepository.find();
   }
 }

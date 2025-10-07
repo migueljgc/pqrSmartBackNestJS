@@ -8,6 +8,7 @@ import { RegisterDto } from './dto/register.dto';
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
+import { Role } from './enums/role.enum';
 
 @Injectable()
 export class AuthService {
@@ -28,7 +29,7 @@ export class AuthService {
     if (!isPasswordValid) {
       throw new UnauthorizedException('Email or password incorrect');
     }
-    const payload = { email: user.email };
+    const payload = { email: user.email, roles: user.role, sub: user.id };
     const token = await this.jwtService.signAsync(payload);
     return { token };
   }
@@ -41,7 +42,9 @@ export class AuthService {
       password: await bcrypt.hash(registerDto.password, 10),
       name: registerDto.fullName ?? '', // Provide default or get from registerDto
       number: registerDto.number, // Provide default or get from registerDto
+      role: Role.Admin, // Default role if not provided
     };
+    console.log('Mapped CreateUserDto:', createUserDto);
     const user = await this.userService.findOneByEmail(registerDto.email);
     if (user) {
       throw new BadRequestException('User with this email already exists');
